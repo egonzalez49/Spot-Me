@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,600');
+
+html {
+  height: 100%;
+}
+
+body {
+  background: #191414;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* background: linear-gradient(180deg, rgba(25,20,20,1) 8%, rgba(47,42,42,1) 62%, rgba(74,68,68,1) 100%); */
+  color: #FFFFFF;
+  font-family: 'Montserrat';
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  padding-top: 32px;
+  overflow: hidden;
+}
+
+.container h2 {
+  text-align: center;
+  color: #1DB954;
+}
+
+.container h5 {
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.login-form .form-group {
+  padding-bottom: 12px;
+  text-align: center;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* align-content: center; */
+}
+
+.button {
+  text-align: center;
+  background: #1DB954;
+  border: none;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 8px 24px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+#photo {
+  width: 8%;
+  height: 8%;
+  margin-right: 12px;
+  vertical-align: bottom;
+}
+
+#label {
+  margin-right: 8px;
+}
+
+.center p {
+  margin-right: 12px;
+  color: #191414;
+  padding: 4px;
+  font-weight: bold;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+}
+
+#genres {
+  margin-top: -12px;
+}
+
+#topTracks li {
+  margin-bottom: 24px;
+}
+
+#topTracks li img {
+  width: 10%;
+  height: 10%;
+  margin-left: 8px;
+  margin-right: 8px;
+}

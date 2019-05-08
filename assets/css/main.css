@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:300,600');
+
+html {
+  height: 100%;
+}
+
+body {
+  background: #191414;
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  /* background: linear-gradient(180deg, rgba(25,20,20,1) 8%, rgba(47,42,42,1) 62%, rgba(74,68,68,1) 100%); */
+  color: #FFFFFF;
+  font-family: 'Montserrat';
+}
+
+.container {
+  width: 80%;
+  margin: auto;
+  padding-top: 32px;
+  overflow: hidden;
+}
+
+.container h2 {
+  text-align: center;
+  margin-bottom: 48px;
+  color: #1DB954;
+}
+
+.login-form .form-group {
+  padding-bottom: 12px;
+  text-align: center;
+}
+
+.login-form label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+.login-form input[type="text"], .login-form input[type="password"] {
+  padding: 4px;
+  width: 29%;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* align-content: center; */
+}
+
+.button {
+  text-align: center;
+  background: #1DB954;
+  border: none;
+  color: #FFFFFF;
+  font-weight: bold;
+  padding: 8px 24px;
+  margin-top: 12px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.list-container {
+  align-items: center;
+}
+
+.list-container h4 {
+  color: #1DB954;
+  text-align: center;
+}
+
+#artistToggle, #songToggle {
+  vertical-align: middle;
+  width: 10%;
+  height: 10%;
+}
+
+.list-container p {
+  display: inline;
+}
+
+.lists {
+  margin-top: 18px;
+  display: table;
+  /* display: inline-block;
+  margin-right: auto;
+  margin-left: auto; */
+  /* padding-left: 32px; */
+}
+
+.lists li {
+  margin-bottom: 24px;
+}
+
+.lists li:hover {
+  color: #1DB954;
+}
+
+.lists li img {
+  width: 10%;
+  height: 10%;
+  margin-left: 8px;
+  margin-right: 8px;
+}
