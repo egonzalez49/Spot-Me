@@ -93,11 +93,21 @@ ipc.on('artist-id', function(event, arg1, arg2) {
         var textnode = document.createTextNode("" + song.name);
         var imgnode = document.createElement("img");
         imgnode.src = song.album.images[2].url;
+        var playnode = document.createElement("img");
+        playnode.src = "../assets/images/play.png";
         node.appendChild(imgnode);
         node.appendChild(textnode);
+        node.appendChild(playnode);
         node.onclick = function() { playPreview(Array.prototype.indexOf.call(topTracks.childNodes, node)); };
         topTracks.appendChild(node);
         soundURLs.push(song.preview_url);
+
+        soundPlayer = new Howl({
+          src: [soundURLs[0]],
+          format: ['mp3'],
+          autoplay: false,
+          volume: 0.3
+        });
 
         //songIDs.push(song.id);
       });
@@ -108,15 +118,50 @@ ipc.on('artist-id', function(event, arg1, arg2) {
   );
 });
 
+var previousValue;
+
 function playPreview(value) {
   // soundPlayer = new Audio(soundURLs[value]);
   // soundPlayer.play();
+  var timeoutID;
+  if (!soundPlayer.playing()) {
+    previousValue = value;
     soundPlayer = new Howl({
       src: [soundURLs[value]],
       format: ['mp3'],
       autoplay: false,
-      volume: 0.3
+      volume: 0.3,
     });
     soundPlayer.play();
-    console.log("Played at value " + value);
+    timeoutID = setTimeout(previewEnd, 30000, value);
+    var node = topTracks.childNodes[value];
+    node.childNodes[2].src = "../assets/images/pause.png";
+    console.log("Playing");
+  } else {
+    soundPlayer.stop();
+    clearTimeout(timeoutID);
+    console.log("Stopped");
+    soundPlayer = new Howl({
+      src: [soundURLs[value]],
+      format: ['mp3'],
+      autoplay: false,
+      volume: 0.3,
+    });
+    var node = topTracks.childNodes[previousValue];
+    node.childNodes[2].src = "../assets/images/play.png";
+    if (previousValue !== value) {
+      soundPlayer.play();
+      timeoutID = setTimeout(previewEnd, 30000, value);
+      var node = topTracks.childNodes[value];
+      node.childNodes[2].src = "../assets/images/pause.png";
+      previousValue = value;
+    }
+  }
+  //soundPlayer.on("end", previewEnd(value));
+}
+
+function previewEnd(value) {
+  console.log("Ended");
+  var node = topTracks.childNodes[value];
+  node.childNodes[2].src = "../assets/images/play.png";
 }
