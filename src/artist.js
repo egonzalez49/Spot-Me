@@ -13,6 +13,7 @@ const superagent = require('superagent');
 const express = require('express')
 const app = express();
 const ipc = electron.ipcRenderer
+var {Howl, Howler} = require('howler')
 
 var Promise = require('promise');
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -110,4 +111,12 @@ ipc.on('artist-id', function(event, arg1, arg2) {
 function playPreview(value) {
   // soundPlayer = new Audio(soundURLs[value]);
   // soundPlayer.play();
+    soundPlayer = new Howl({
+      src: [soundURLs[value]],
+      format: ['mp3'],
+      autoplay: false,
+      volume: 0.3
+    });
+    soundPlayer.play();
+    console.log("Played at value " + value);
 }
