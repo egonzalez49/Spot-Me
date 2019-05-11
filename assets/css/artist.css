@@ -14,82 +14,58 @@ body {
   font-family: 'Montserrat';
 }
 
-.container {
-  width: 80%;
-  margin: auto;
-  padding-top: 32px;
-  overflow: hidden;
-}
-
 .container h2 {
-  text-align: center;
-  color: #1DB954;
-}
-
-.container h4 {
-  text-align: center;
   color: #1DB954;
 }
 
 .container h5 {
-  text-align: center;
   color: #FFFFFF;
 }
 
-.login-form .form-group {
-  padding-bottom: 12px;
-  text-align: center;
+#play {
+  height: auto;
+  width: auto;
+  max-width: 16px;
+  max-height: 16px;
+  margin-bottom: 4px;
+  margin-left: 8px;
 }
 
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* align-content: center; */
-}
-
-.button {
-  text-align: center;
-  background: #1DB954;
-  border: none;
-  color: #FFFFFF;
-  font-weight: bold;
-  padding: 8px 24px;
-  margin-top: 12px;
+#play:hover {
   cursor: pointer;
 }
 
 #photo {
-  width: 8%;
-  height: 8%;
-  margin-right: 12px;
-  vertical-align: bottom;
+  height: auto;
+  width: auto;
+  max-width: 258px;
+  max-height: 258px;
 }
 
-#label {
-  margin-right: 8px;
+#photo2 {
+  height: auto;
+  width: auto;
+  max-width: 64px;
+  max-height: 64px;
 }
 
-.center p {
-  margin-right: 12px;
-  color: #191414;
-  padding: 4px;
-  font-weight: bold;
-  background-color: #FFFFFF;
-  border-radius: 8px;
+.badge-success {
+  background-color: #1DB954 !important;
 }
 
-#genres {
-  margin-top: -12px;
+#genres p {
+  margin-right: 4px;
 }
 
-#topTracks li {
-  margin-bottom: 24px;
+#genres:nth-child(3n) {
+  break-after: always; /* New syntax */
 }
+
+.media-body {
+  word-wrap: break-word;
+}
+
 
 #topTracks li img {
-  width: 10%;
-  height: 10%;
-  margin-left: 8px;
   margin-right: 8px;
 }

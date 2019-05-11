@@ -2,27 +2,37 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Spot Me</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/css/artist.css">
   </head>
   <body>
     <div class="container">
-      <div class="center">
+      <!-- <div class="center">
         <img id="photo"></img>
         <h2 id="name"></h2>
-      </div>
-      <div class="center">
-        <h5 id="label">Followers:</h5>
-        <h5 id="followers"></h5>
-      </div>
-      <div id="genres" class="center">
-      </div>
-      <div class="center">
-        <h4 id="top">Top Tracks</h4>
-      </div>
-      <div class="center">
-        <ul id="topTracks">
-        </ul>
+      </div> -->
+      <div class="row justify-content-center mt-4">
+        <div class="col-6">
+          <div class="media">
+            <img id="photo" class="mr-3">
+            <div class="media-body">
+              <h2 id="name" class="font-weight-bold mt-0 text-left"></h2>
+              <h5 id="label" class="mt-0 text-left">Followers:</h5>
+              <div id="genres" class="d-inline-flex flex-wrap mt-1">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- End of Header -->
+
+      <div class="row justify-content-center mt-4">
+        <div class="col-6">
+          <h4 id="top" class="text-center mt-3">Top Tracks</h4>
+          <ul id="topTracks" class="px-auto">
+          </ul>
+        </div>
       </div>
 
       <!-- <div class="center">
@@ -49,5 +59,6 @@
 
     <!-- <script src="../node_modules/howler/dist/howler.js"></script> -->
     <script src="artist.js"></script>
+    <script src="scripts.js"></script>
   </body>
 </html>

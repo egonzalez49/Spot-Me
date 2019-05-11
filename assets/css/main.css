@@ -76,17 +76,17 @@ body {
   height: 10%;
 }
 
-.list-container p {
+/* .list-container p {
   display: inline;
 }
 
 .lists {
   margin-top: 18px;
   display: table;
-  /* display: inline-block;
+   display: inline-block;
   margin-right: auto;
-  margin-left: auto; */
-  /* padding-left: 32px; */
+  margin-left: auto;
+   padding-left: 32px;
 }
 
 .lists li {
@@ -98,8 +98,38 @@ body {
 }
 
 .lists li img {
-  width: 10%;
-  height: 10%;
+  width: 24px;
+  height: 24px;
   margin-left: 8px;
   margin-right: 8px;
+} */
+
+li:hover {
+  color: #1DB954;
+  cursor: pointer;
+  /* border-color: #1DB954 !important; */
+}
+
+#resize {
+    height: auto;
+    width: auto;
+    max-width: 64px;
+    max-height: 64px;
+}
+
+#artistToggle, #songToggle {
+    height: auto;
+    width: auto;
+    max-width: 50px;
+    max-height: 50px;
+    transform: rotate(270deg);
+}
+
+.media-body {
+  align-content: center;
+}
+
+.list-group-item {
+  background-color: #191414 !important;
+  border-bottom-color: #7f8c8d !important;
 }

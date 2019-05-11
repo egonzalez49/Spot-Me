@@ -2,12 +2,18 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Spot Me</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="../assets/css/main.css">
   </head>
   <body>
     <div class="container">
-      <h2>Spot Me</h2>
+      <div class="row justify-content-md-center">
+        <div class="col-md-auto">
+          <h2 class="font-weight-bold">Spot Me</h2>
+        </div>
+      </div><!-- End of Header -->
       <form class="login-form">
         <!-- <div class="form-group">
           <label>Username</label>
@@ -21,9 +27,10 @@
           <input id="login" class="button" type="submit" value="Authorize">
         </div>
       </form>
-      <div class="center">
+
+      <!-- <div class="center">
         <div id="artistlist" class="list-container">
-          <h4 id="artisttitle">Top Artists</h4>
+          <h4 id="artistTitle">Top Artists</h4>
           <div class="center">
             <img id="artistToggle" onclick="toggleArtist()" src="../assets/images/shortterm.png">
             <p id="artistTerm">Short Term</p>
@@ -32,7 +39,7 @@
           </ol>
         </div>
         <div id="songlist" class="list-container">
-          <h4 id="songtitle">Top Songs</h4>
+          <h4 id="songTitle">Top Songs</h4>
           <div class="center">
             <img id="songToggle" onclick="toggleSong()" src="../assets/images/shortterm.png">
             <p id="songTerm">Short Term</p>
@@ -40,9 +47,33 @@
           <ol id="songs" class="lists">
           </ol>
         </div>
+      </div> -->
+
+      <div class="row justify-content-md-center">
+        <div id="artistlist" class="col">
+          <h4 id="artisttitle" class="text-center">Top Artists</h4>
+          <div class="text-center">
+            <img id="artistToggle" onclick="toggleArtist()" src="../assets/images/shortterm.png">
+            <small id="artistTerm">Short Term</small>
+          </div>
+          <ol id="artists" class="">
+
+          </ol>
+        </div>
+        <div id="songlist" class="col">
+          <h4 id="songtitle" class="text-center">Top Songs</h4>
+          <div class="text-center">
+            <img id="songToggle" onclick="toggleSong()" src="../assets/images/shortterm.png">
+            <small id="songTerm">Short Term</small>
+          </div>
+          <ol id="songs">
+
+          </ol>
+        </div>
       </div>
     </div> <!--End of container-->
 
     <script src="index.js"></script>
+    <script src="scripts.js"></script>
   </body>
 </html>

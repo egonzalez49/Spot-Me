@@ -89,14 +89,29 @@ app.get('/callback', function(req, res) {
           }
 
           topArtists.forEach(function(artist) {
-            console.log(artist.name);
             var node = document.createElement("li");
+            node.className = "media mt-3";
+            //node.setAttribute("id", "list-item");
             var textnode = document.createTextNode("" + artist.name);
+            // var span = document.createElement("span");
+            // span.appendChild(document.createTextNode("" + artist.popularity));
+            // span.className = "badge badge-primary badge-pill";
+            // textnode.insertAdjacentElement("beforeend",span);
+            var div = document.createElement("div");
+            div.className = "media-body";
+            div.appendChild(textnode);
+            // var span = document.createElement("span");
+            // span.className = "badge badge-primary badge-pill";
+            // span.setAttribute("id", "popular");
+            // span.innerHTML = "" + artist.popularity;
+            // textnode.appendChild(span);
             textnode.onclick = "viewArtist(i)";
             var imgnode = document.createElement("img");
+            imgnode.className = " align-self-center mr-3";
+            imgnode.setAttribute("id", "resize");
             imgnode.src = artist.images[2].url;
             node.appendChild(imgnode);
-            node.appendChild(textnode);
+            node.appendChild(div);
             node.onclick = function() { viewArtist(Array.prototype.indexOf.call(artists.childNodes, node)); };
             artists.appendChild(node);
 
@@ -116,14 +131,20 @@ app.get('/callback', function(req, res) {
           songList.style.visibility = 'visible';
 
           topSongs.forEach(function(song) {
-            console.log(song.name);
             var node = document.createElement("li");
+            //node.setAttribute("class", "list-group-item");
+            node.className = "media mt-3";
             var textnode = document.createTextNode("" + song.name);
+            var div = document.createElement("div");
+            div.className = "media-body";
+            div.appendChild(textnode);
             var imgnode = document.createElement("img");
+            imgnode.className = "align-self-center mr-3";
+            imgnode.setAttribute("id", "resize");
             imgnode.src = song.album.images[2].url;
             node.appendChild(imgnode);
-            node.appendChild(textnode);
-            node.onclick = function() { viewArtist(Array.prototype.indexOf.call(songs.childNodes, node)); };
+            node.appendChild(div);
+            //node.onclick = function() { viewArtist(Array.prototype.indexOf.call(songs.childNodes, node)); };
             songs.appendChild(node);
 
             songIDs.push(song.id);
@@ -232,13 +253,20 @@ function newFilter(valueArtist, valueSong) {
       }
 
       topArtists.forEach(function(artist) {
-        console.log(artist.name);
         var node = document.createElement("li");
+        node.className = "media mt-3";
+        //node.setAttribute("id", "list-item");
         var textnode = document.createTextNode("" + artist.name);
+        var div = document.createElement("div");
+        div.className = "media-body";
+        div.appendChild(textnode);
+        textnode.onclick = "viewArtist(i)";
         var imgnode = document.createElement("img");
+        imgnode.className = " align-self-center mr-3";
+        imgnode.setAttribute("id", "resize");
         imgnode.src = artist.images[2].url;
         node.appendChild(imgnode);
-        node.appendChild(textnode);
+        node.appendChild(div);
         node.onclick = function() { viewArtist(Array.prototype.indexOf.call(artists.childNodes, node)); };
         artists.appendChild(node);
 
@@ -262,14 +290,20 @@ function newFilter(valueArtist, valueSong) {
       }
 
       topSongs.forEach(function(song) {
-        console.log(song.name);
         var node = document.createElement("li");
+        //node.setAttribute("class", "list-group-item");
+        node.className = "media mt-3";
         var textnode = document.createTextNode("" + song.name);
+        var div = document.createElement("div");
+        div.className = "media-body";
+        div.appendChild(textnode);
         var imgnode = document.createElement("img");
+        imgnode.className = "align-self-center mr-3";
+        imgnode.setAttribute("id", "resize");
         imgnode.src = song.album.images[2].url;
         node.appendChild(imgnode);
-        node.appendChild(textnode);
-        node.onclick = function() { viewArtist(Array.prototype.indexOf.call(songs.childNodes, node)); };
+        node.appendChild(div);
+        //node.onclick = function() { viewArtist(Array.prototype.indexOf.call(songs.childNodes, node)); };
         songs.appendChild(node);
 
         songIDs.push(song.id);

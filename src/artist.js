@@ -3,7 +3,7 @@ const path = require('path')
 const BrowserWindow = electron.remote.BrowserWindow
 
 const name = document.getElementById('name')
-const followers = document.getElementById('followers')
+const followers = document.getElementById('label')
 const image = document.getElementById('photo')
 const genreList = document.getElementById('genres')
 const topTracks = document.getElementById('topTracks')
@@ -63,14 +63,14 @@ ipc.on('artist-id', function(event, arg1, arg2) {
       var artist = data.body;
 
       name.innerHTML = "" + artist.name;
-      followers.innerHTML = "" + artist.followers.total;
+      followers.innerHTML = followers.innerHTML + " " + artist.followers.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");;
       image.src = artist.images[2].url;
       var genres = artist.genres;
       genres.forEach(function(genre) {
         var node = document.createTextNode("" + genre);
         node.innerHTML = id +
         console.log(genre);
-        genreList.insertAdjacentHTML('afterbegin', '<p>' + genre + '</p>');
+        genreList.insertAdjacentHTML('afterbegin', '<p class="badge badge-pill badge-success">' + genre + '</p>');
       });
     },
     function(err) {
@@ -90,11 +90,14 @@ ipc.on('artist-id', function(event, arg1, arg2) {
       tracks.forEach(function(song) {
         console.log(song.name);
         var node = document.createElement("li");
+        node.className = "mt-3"
         var textnode = document.createTextNode("" + song.name);
         var imgnode = document.createElement("img");
         imgnode.src = song.album.images[2].url;
+        imgnode.setAttribute("id", "photo2");
         var playnode = document.createElement("img");
         playnode.src = "../assets/images/play.png";
+        playnode.setAttribute("id", "play");
         node.appendChild(imgnode);
         node.appendChild(textnode);
         node.appendChild(playnode);
