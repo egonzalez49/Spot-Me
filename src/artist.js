@@ -7,6 +7,8 @@ const followers = document.getElementById('label')
 const image = document.getElementById('photo')
 const genreList = document.getElementById('genres')
 const topTracks = document.getElementById('topTracks')
+const myModal = document.getElementById('myModal')
+const playlists = document.getElementById('playlists')
 
 const axios = require('axios')
 const superagent = require('superagent');
@@ -20,6 +22,9 @@ var SpotifyWebApi = require('spotify-web-api-node');
 
 var soundPlayer;
 var soundURLs = [];
+var soundURIs = [];
+var playlist = [];
+var playlistIDs = [];
 
 //Authentication Variables
 var redirect_uri = 'http://localhost:5000/callback';
@@ -88,22 +93,31 @@ ipc.on('artist-id', function(event, arg1, arg2) {
       }
 
       tracks.forEach(function(song) {
-        console.log(song.name);
+        //console.log(song.name);
         var node = document.createElement("li");
-        node.className = "mt-3"
+        node.className = "mt-3";
         var textnode = document.createTextNode("" + song.name);
         var imgnode = document.createElement("img");
         imgnode.src = song.album.images[2].url;
         imgnode.setAttribute("id", "photo2");
+
         var playnode = document.createElement("img");
         playnode.src = "../assets/images/play.png";
         playnode.setAttribute("id", "play");
         node.appendChild(imgnode);
         node.appendChild(textnode);
         node.appendChild(playnode);
-        node.onclick = function() { playPreview(Array.prototype.indexOf.call(topTracks.childNodes, node)); };
+        var savenode = document.createElement("img");
+        savenode.src = "../assets/images/save.png";
+        savenode.setAttribute("id", "play");
+        savenode.onclick = function () { openModal(Array.prototype.indexOf.call(topTracks.childNodes, savenode.parentNode)); };
+        node.appendChild(savenode);
+        playnode.onclick = function() { playPreview(Array.prototype.indexOf.call(topTracks.childNodes, playnode.parentNode)); };
         topTracks.appendChild(node);
+        //imgnode.onclick = function() { playPreview(topTracks.children.indexOf(imgnode.parentNode)); };
         soundURLs.push(song.preview_url);
+        soundURIs.push(song.uri);
+        //console.log(imgnode.parentNode);
 
         soundPlayer = new Howl({
           src: [soundURLs[0]],
@@ -119,6 +133,94 @@ ipc.on('artist-id', function(event, arg1, arg2) {
       console.error(err);
     }
   );
+
+  var user;
+
+  // Get the authenticated user
+  spotifyApi.getMe()
+    .then(function(data) {
+      console.log('Some information about the authenticated user', data.body);
+      user = data.body.display_name;
+    }, function(err) {
+      console.log('Something went wrong!', err);
+    });
+
+  // Get a user's playlists
+  spotifyApi.getUserPlaylists()
+    .then(function(data) {
+      console.log('Retrieved playlists', data.body);
+      var x = data.body.items;
+      //console.log("X:" + x.name);
+      x.forEach(function(pl) {
+        //console.log(pl.name);
+        //console.log(user);
+        if(pl.owner.display_name === user) {
+          playlist.push(pl.name);
+          playlistIDs.push(pl.id);
+        }
+      });
+      //console.log("Playlists: " + playlist);
+    },function(err) {
+      console.log('Something went wrong!', err);
+    });
+});
+
+var uri;
+
+function openModal(value) {
+  uri = soundURIs[value];
+  while (playlists.firstChild) {
+    playlists.removeChild(playlists.firstChild);
+  }
+  console.log("RAN1");
+
+  playlist.forEach(function(name) {
+    var node = document.createElement("li");
+    var div = document.createElement("div");
+    div.className = "form-check";
+    node.className = "mt-3";
+    var textnode = document.createTextNode("" + name);
+    var radio = document.createElement("input");
+    radio.className = "form-check-input";
+    radio.type = "radio";
+    radio.name = "action";
+    div.appendChild(radio);
+    div.appendChild(textnode);
+    node.appendChild(div);
+    playlists.appendChild(node);
+  });
+  console.log("RAN2");
+  $("#myModal").modal();
+}
+
+
+const save = document.getElementById("saveBtn");
+save.addEventListener('click', function (event) {
+  var playlistNumber = null;
+  for (var i = 0; i < playlists.childNodes.length; i++) {
+    if (playlists.childNodes[i].childNodes[0].childNodes[0].checked) {
+      playlistNumber = i;
+      break;
+    }
+  }
+
+  if (playlistNumber === null) {
+    $('#alert_placeholder').html('<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+                    '<strong>Error!</strong> Please select a playlist.</div>');
+  } else {
+    var id = playlistIDs[playlistNumber];
+    // Add tracks to a playlist
+    spotifyApi.addTracksToPlaylist(id, [uri])
+      .then(function(data) {
+        console.log('Added tracks to playlist!');
+        $("#myModal").modal("toggle");
+        $('#alert_placeholder2').html('<div class="alert alert-success alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+                        '<strong>Success!</strong> Song added to playlist.</div>');
+      }, function(err) {
+        console.log('Something went wrong!', err);
+      });
+    console.log(playlistNumber);
+  }
 });
 
 var previousValue;
