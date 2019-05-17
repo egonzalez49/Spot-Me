@@ -76,6 +76,19 @@ body {
   height: 10%;
 }
 
+#play {
+  height: auto;
+  width: auto;
+  max-width: 16px;
+  max-height: 16px;
+  margin-bottom: 4px;
+  margin-left: 8px;
+}
+
+#play:hover {
+  cursor: pointer;
+}
+
 /* .list-container p {
   display: inline;
 }

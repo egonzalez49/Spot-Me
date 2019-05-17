@@ -7,6 +7,9 @@ const artistList = document.getElementById('artistlist')
 artistList.style.visibility = 'hidden';
 const songList = document.getElementById('songlist')
 songList.style.visibility = 'hidden';
+const recommended = document.getElementById('recArtists')
+const recDiv = document.getElementById('recommended')
+recDiv.style.visibility = 'hidden';
 
 const axios = require('axios')
 const superagent = require('superagent');
@@ -14,8 +17,13 @@ const express = require('express')
 const app = express();
 const ipc = electron.ipcRenderer
 
+var recURLs = [];
+var soundPlayer;
+var recNames = [];
+
 var Promise = require('promise');
 var SpotifyWebApi = require('spotify-web-api-node');
+var {Howl, Howler} = require('howler')
 
 //Authentication Variables
 var redirect_uri = 'http://localhost:5000/callback';
@@ -117,6 +125,79 @@ app.get('/callback', function(req, res) {
 
             artistIDs.push(artist.id);
           });
+
+          var seed_artists = [];
+          for (var i = 0; i < 4; i++) {
+            seed_artists.push(artistIDs[i]);
+          }
+
+          console.log("Seed Artists: " + seed_artists);
+
+          spotifyApi.getRecommendations({ limit: 10,  seed_artists }).then(
+            function(data) {
+              console.log('Recommended Artists', data.body);
+
+              var recArtists = data.body.tracks;
+              recDiv.style.visibility = 'visible';
+
+              while (recommended.firstChild) {
+                recommended.removeChild(recommended.firstChild);
+              }
+
+              recArtists.forEach(function(song) {
+                var node = document.createElement("li");
+                node.className = "mt-3";
+                var textnode = document.createTextNode("" + song.name);
+                var imgnode = document.createElement("img");
+                imgnode.src = song.album.images[2].url;
+                imgnode.setAttribute("id", "photo2");
+                imgnode.className = "mr-3";
+
+                var playnode = document.createElement("img");
+                playnode.src = "../assets/images/play.png";
+                playnode.setAttribute("id", "play");
+                node.appendChild(imgnode);
+                node.appendChild(textnode);
+                node.appendChild(playnode);
+                playnode.onclick = function() { playPreview(Array.prototype.indexOf.call(recommended.childNodes, playnode.parentNode)); };
+                //node.onclick = function() { viewArtist(Array.prototype.indexOf.call(songs.childNodes, node)); };
+                recommended.appendChild(node);
+                recURLs.push({name: song.name, preview: song.preview_url});
+                if(song.preview_url === null) {
+
+                    spotifyApi.getTrack(song.id, { market:'US' }).then(
+                      function(data) {
+                        console.log('Track', data.body);
+                        for (var i = 0; i < recURLs.length; i++) {
+                          if (data.body.name === recURLs[i].name) {
+                            recURLs[i].preview = data.body.preview_url;
+                            console.log("Inserting: " + data.body.name + " at " + i);
+                            break;
+                          }
+                        }
+                      },
+                      function(err) {
+                        console.error(err);
+                      }
+                    );
+
+                } else {
+                  //recURLs.push(song.preview_url);
+                }
+                console.log("URLs: " + recNames);
+
+                soundPlayer = new Howl({
+                  src: [recURLs[0].preview],
+                  format: ['mp3'],
+                  autoplay: false,
+                  volume: 0.3
+                });
+              });
+            },
+            function(err) {
+              console.error(err);
+            }
+          );
         },
         function(err) {
           console.error(err);
@@ -155,7 +236,6 @@ app.get('/callback', function(req, res) {
         }
       );
 
-
     },
     function(err) {
       console.log(
@@ -164,9 +244,68 @@ app.get('/callback', function(req, res) {
       );
     }
   );
+  //
+  //
+  //   },
+  //   function(err) {
+  //     console.log(
+  //       'Something went wrong when retrieving the access token!',
+  //       err.message
+  //     );
+  //   }
+  // );
+
 
   authWindow.close();
 });
+
+var previousValue;
+
+function playPreview(value) {
+  // soundPlayer = new Audio(soundURLs[value]);
+  // soundPlayer.play();
+  var timeoutID;
+  if (!soundPlayer.playing()) {
+    previousValue = value;
+    soundPlayer = new Howl({
+      src: [recURLs[value].preview],
+      format: ['mp3'],
+      autoplay: false,
+      volume: 0.3,
+    });
+    soundPlayer.play();
+    timeoutID = setTimeout(previewEnd, 30000, value);
+    var node = recommended.childNodes[value];
+    node.childNodes[2].src = "../assets/images/pause.png";
+    console.log("Playing");
+  } else {
+    soundPlayer.stop();
+    clearTimeout(timeoutID);
+    console.log("Stopped");
+    soundPlayer = new Howl({
+      src: [recURLs[value].preview],
+      format: ['mp3'],
+      autoplay: false,
+      volume: 0.3,
+    });
+    var node = recommended.childNodes[previousValue];
+    node.childNodes[2].src = "../assets/images/play.png";
+    if (previousValue !== value) {
+      soundPlayer.play();
+      timeoutID = setTimeout(previewEnd, 30000, value);
+      var node = recommended.childNodes[value];
+      node.childNodes[2].src = "../assets/images/pause.png";
+      previousValue = value;
+    }
+  }
+  //soundPlayer.on("end", previewEnd(value));
+}
+
+function previewEnd(value) {
+  console.log("Ended");
+  var node = recommended.childNodes[value];
+  node.childNodes[2].src = "../assets/images/play.png";
+}
 
 // Continually print out the time left until the token expires..
 var numberOfTimesUpdated = 0;
