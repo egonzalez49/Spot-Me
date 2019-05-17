@@ -141,26 +141,44 @@ ipc.on('artist-id', function(event, arg1, arg2) {
     .then(function(data) {
       console.log('Some information about the authenticated user', data.body);
       user = data.body.display_name;
-    }, function(err) {
-      console.log('Something went wrong!', err);
-    });
+      // Get a user's playlists
+      spotifyApi.getUserPlaylists()
+        .then(function(data) {
+          console.log('Retrieved playlists', data.body);
+          var x = data.body.items;
+          //console.log("X:" + x.name);
+          x.forEach(function(pl) {
+            //console.log(pl.name);
+            //console.log(user);
+            if(pl.owner.display_name === user) {
+              playlist.push(pl.name);
+              playlistIDs.push(pl.id);
+            }
+          });
 
-  // Get a user's playlists
-  spotifyApi.getUserPlaylists()
-    .then(function(data) {
-      console.log('Retrieved playlists', data.body);
-      var x = data.body.items;
-      //console.log("X:" + x.name);
-      x.forEach(function(pl) {
-        //console.log(pl.name);
-        //console.log(user);
-        if(pl.owner.display_name === user) {
-          playlist.push(pl.name);
-          playlistIDs.push(pl.id);
-        }
-      });
-      //console.log("Playlists: " + playlist);
-    },function(err) {
+          while (playlists.firstChild) {
+            playlists.removeChild(playlists.firstChild);
+          }
+          playlist.forEach(function(name) {
+            var node = document.createElement("li");
+            var div = document.createElement("div");
+            div.className = "form-check";
+            node.className = "mt-3";
+            var textnode = document.createTextNode("" + name);
+            var radio = document.createElement("input");
+            radio.className = "form-check-input";
+            radio.type = "radio";
+            radio.name = "action";
+            div.appendChild(radio);
+            div.appendChild(textnode);
+            node.appendChild(div);
+            playlists.appendChild(node);
+          });
+          //console.log("Playlists: " + playlist);
+        },function(err) {
+          console.log('Something went wrong!', err);
+        });
+    }, function(err) {
       console.log('Something went wrong!', err);
     });
 });
@@ -169,26 +187,26 @@ var uri;
 
 function openModal(value) {
   uri = soundURIs[value];
-  while (playlists.firstChild) {
-    playlists.removeChild(playlists.firstChild);
-  }
-  console.log("RAN1");
-
-  playlist.forEach(function(name) {
-    var node = document.createElement("li");
-    var div = document.createElement("div");
-    div.className = "form-check";
-    node.className = "mt-3";
-    var textnode = document.createTextNode("" + name);
-    var radio = document.createElement("input");
-    radio.className = "form-check-input";
-    radio.type = "radio";
-    radio.name = "action";
-    div.appendChild(radio);
-    div.appendChild(textnode);
-    node.appendChild(div);
-    playlists.appendChild(node);
-  });
+  // while (playlists.firstChild) {
+  //   playlists.removeChild(playlists.firstChild);
+  // }
+  // console.log("RAN1");
+  //
+  // playlist.forEach(function(name) {
+  //   var node = document.createElement("li");
+  //   var div = document.createElement("div");
+  //   div.className = "form-check";
+  //   node.className = "mt-3";
+  //   var textnode = document.createTextNode("" + name);
+  //   var radio = document.createElement("input");
+  //   radio.className = "form-check-input";
+  //   radio.type = "radio";
+  //   radio.name = "action";
+  //   div.appendChild(radio);
+  //   div.appendChild(textnode);
+  //   node.appendChild(div);
+  //   playlists.appendChild(node);
+  // });
   console.log("RAN2");
   $("#myModal").modal();
 }
