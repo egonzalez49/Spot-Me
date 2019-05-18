@@ -208,6 +208,7 @@ function openModal(value) {
   //   playlists.appendChild(node);
   // });
   console.log("RAN2");
+  $('#alert_placeholder').html('<div id = "alert_placeholder"></div>');
   $("#myModal").modal();
 }
 
@@ -242,11 +243,11 @@ save.addEventListener('click', function (event) {
 });
 
 var previousValue;
+var timeoutID;
 
 function playPreview(value) {
   // soundPlayer = new Audio(soundURLs[value]);
   // soundPlayer.play();
-  var timeoutID;
   if (!soundPlayer.playing()) {
     previousValue = value;
     soundPlayer = new Howl({

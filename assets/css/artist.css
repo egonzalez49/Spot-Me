@@ -29,6 +29,12 @@ body {
   color: #191414;
 }
 
+li:hover {
+  color: #1DB954;
+  cursor: pointer;
+  /* border-color: #1DB954 !important; */
+}
+
 #alert_placeholder2 {
   margin-top: 12px;
 }

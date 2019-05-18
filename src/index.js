@@ -10,6 +10,7 @@ songList.style.visibility = 'hidden';
 const recommended = document.getElementById('recArtists')
 const recDiv = document.getElementById('recommended')
 recDiv.style.visibility = 'hidden';
+const playlists = document.getElementById('playlists')
 
 const axios = require('axios')
 const superagent = require('superagent');
@@ -20,6 +21,9 @@ const ipc = electron.ipcRenderer
 var recURLs = [];
 var soundPlayer;
 var recNames = [];
+var soundURIs = [];
+var playlist = [];
+var playlistIDs = [];
 
 var Promise = require('promise');
 var SpotifyWebApi = require('spotify-web-api-node');
@@ -87,7 +91,7 @@ app.get('/callback', function(req, res) {
 
       spotifyApi.getMyTopArtists({ limit: 10, time_range: 'short_term' }).then(
         function(data) {
-          console.log('Top Artists', data.body.items);
+          //console.log('Top Artists', data.body.items);
 
           var topArtists = data.body.items;
           artistList.style.visibility = 'visible';
@@ -135,7 +139,7 @@ app.get('/callback', function(req, res) {
 
           spotifyApi.getRecommendations({ limit: 10,  seed_artists }).then(
             function(data) {
-              console.log('Recommended Artists', data.body);
+              //console.log('Recommended Artists', data.body);
 
               var recArtists = data.body.tracks;
               recDiv.style.visibility = 'visible';
@@ -159,19 +163,25 @@ app.get('/callback', function(req, res) {
                 node.appendChild(imgnode);
                 node.appendChild(textnode);
                 node.appendChild(playnode);
+                var savenode = document.createElement("img");
+                savenode.src = "../assets/images/save.png";
+                savenode.setAttribute("id", "play");
+                savenode.onclick = function () { openModal(Array.prototype.indexOf.call(recommended.childNodes, savenode.parentNode)); };
+                node.appendChild(savenode);
                 playnode.onclick = function() { playPreview(Array.prototype.indexOf.call(recommended.childNodes, playnode.parentNode)); };
                 //node.onclick = function() { viewArtist(Array.prototype.indexOf.call(songs.childNodes, node)); };
                 recommended.appendChild(node);
+                soundURIs.push(song.uri);
                 recURLs.push({name: song.name, preview: song.preview_url});
                 if(song.preview_url === null) {
 
                     spotifyApi.getTrack(song.id, { market:'US' }).then(
                       function(data) {
-                        console.log('Track', data.body);
+                        //console.log('Track', data.body);
                         for (var i = 0; i < recURLs.length; i++) {
                           if (data.body.name === recURLs[i].name) {
                             recURLs[i].preview = data.body.preview_url;
-                            console.log("Inserting: " + data.body.name + " at " + i);
+                            //console.log("Inserting: " + data.body.name + " at " + i);
                             break;
                           }
                         }
@@ -184,7 +194,7 @@ app.get('/callback', function(req, res) {
                 } else {
                   //recURLs.push(song.preview_url);
                 }
-                console.log("URLs: " + recNames);
+                //console.log("URLs: " + recNames);
 
                 soundPlayer = new Howl({
                   src: [recURLs[0].preview],
@@ -206,7 +216,7 @@ app.get('/callback', function(req, res) {
 
       spotifyApi.getMyTopTracks({ limit: 10, time_range: 'short_term' }).then(
         function(data) {
-          console.log('Top Tracks', data.body.items);
+          //console.log('Top Tracks', data.body.items);
 
           var topSongs = data.body.items;
           songList.style.visibility = 'visible';
@@ -236,6 +246,54 @@ app.get('/callback', function(req, res) {
         }
       );
 
+      var user;
+
+      // Get the authenticated user
+      spotifyApi.getMe()
+        .then(function(data) {
+          //console.log('Some information about the authenticated user', data.body);
+          user = data.body.display_name;
+          // Get a user's playlists
+          spotifyApi.getUserPlaylists()
+            .then(function(data) {
+              //console.log('Retrieved playlists', data.body);
+              var x = data.body.items;
+              //console.log("X:" + x.name);
+              x.forEach(function(pl) {
+                //console.log(pl.name);
+                //console.log(user);
+                if(pl.owner.display_name === user) {
+                  playlist.push(pl.name);
+                  playlistIDs.push(pl.id);
+                }
+              });
+
+              while (playlists.firstChild) {
+                playlists.removeChild(playlists.firstChild);
+              }
+              playlist.forEach(function(name) {
+                var node = document.createElement("li");
+                var div = document.createElement("div");
+                div.className = "form-check";
+                node.className = "mt-3";
+                var textnode = document.createTextNode("" + name);
+                var radio = document.createElement("input");
+                radio.className = "form-check-input";
+                radio.type = "radio";
+                radio.name = "action";
+                div.appendChild(radio);
+                div.appendChild(textnode);
+                node.appendChild(div);
+                playlists.appendChild(node);
+              });
+             console.log("Playlists: " + playlist);
+            },function(err) {
+              console.log('Something went wrong!', err);
+            });
+        }, function(err) {
+          console.log('Something went wrong!', err);
+        });
+
     },
     function(err) {
       console.log(
@@ -259,12 +317,72 @@ app.get('/callback', function(req, res) {
   authWindow.close();
 });
 
+var uri;
+
+function openModal(value) {
+  uri = soundURIs[value];
+  // while (playlists.firstChild) {
+  //   playlists.removeChild(playlists.firstChild);
+  // }
+  // console.log("RAN1");
+  //
+  // playlist.forEach(function(name) {
+  //   var node = document.createElement("li");
+  //   var div = document.createElement("div");
+  //   div.className = "form-check";
+  //   node.className = "mt-3";
+  //   var textnode = document.createTextNode("" + name);
+  //   var radio = document.createElement("input");
+  //   radio.className = "form-check-input";
+  //   radio.type = "radio";
+  //   radio.name = "action";
+  //   div.appendChild(radio);
+  //   div.appendChild(textnode);
+  //   node.appendChild(div);
+  //   playlists.appendChild(node);
+  // });
+  console.log("RAN2");
+  $('#alert_placeholder').html('<div id = "alert_placeholder"></div>');
+  $("#myModal").modal();
+}
+
+
+const save = document.getElementById("saveBtn");
+save.addEventListener('click', function (event) {
+  var playlistNumber = null;
+  for (var i = 0; i < playlists.childNodes.length; i++) {
+    if (playlists.childNodes[i].childNodes[0].childNodes[0].checked) {
+      playlistNumber = i;
+      break;
+    }
+  }
+
+  if (playlistNumber === null) {
+    $('#alert_placeholder').html('<div class="alert alert-danger alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+                    '<strong>Error!</strong> Please select a playlist.</div>');
+  } else {
+    var id = playlistIDs[playlistNumber];
+    // Add tracks to a playlist
+    spotifyApi.addTracksToPlaylist(id, [uri])
+      .then(function(data) {
+        console.log('Added tracks to playlist!');
+        $("#myModal").modal("toggle");
+        $('#alert_placeholder2').html('<div class="alert alert-success alert-dismissible"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+                        '<strong>Success!</strong> Song added to playlist.</div>');
+      }, function(err) {
+        console.log('Something went wrong!', err);
+      });
+    //console.log(playlistNumber);
+  }
+});
+
 var previousValue;
+var timeoutID;
 
 function playPreview(value) {
   // soundPlayer = new Audio(soundURLs[value]);
   // soundPlayer.play();
-  var timeoutID;
+  //var timeoutID;
   if (!soundPlayer.playing()) {
     previousValue = value;
     soundPlayer = new Howl({
