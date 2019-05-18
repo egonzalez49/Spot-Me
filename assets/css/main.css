@@ -27,6 +27,20 @@ body {
   color: #1DB954;
 }
 
+#question {
+  vertical-align: center;
+  height: auto;
+  color: #191414;
+  margin-left: 8px;
+  width: auto;
+  max-width: 20px;
+  max-height: 20px;
+}
+
+.popover-header {
+  color: #191414;
+}
+
 .login-form .form-group {
   padding-bottom: 12px;
   text-align: center;

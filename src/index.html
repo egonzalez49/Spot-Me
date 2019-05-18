@@ -51,7 +51,8 @@
 
       <div class="row justify-content-md-center">
         <div id="artistlist" class="col">
-          <h4 id="artisttitle" class="text-center">Top Artists</h4>
+          <h4 id="artisttitle" class="text-center">Top Artists<img id="question" data-toggle="popover"
+            title="Top Artist Info." tabindex="0" data-trigger="focus" data-content="Short-term: 1-2 week. Medium-term: 4 months+. Long-term: 1 year+." src="../assets/images/question.png"></img></h4>
           <div class="text-center">
             <img id="artistToggle" onclick="toggleArtist()" src="../assets/images/shortterm.png">
             <small id="artistTerm">Short Term</small>
@@ -61,7 +62,8 @@
           </ol>
         </div>
         <div id="songlist" class="col">
-          <h4 id="songtitle" class="text-center">Top Songs</h4>
+          <h4 id="songtitle" class="text-center">Top Songs<img id="question" data-toggle="popover"
+            title="Top Artist Info." tabindex="0" data-trigger="focus" data-content="Short-term: 1-2 week. Medium-term: 4 months+. Long-term: 1 year+." src="../assets/images/question.png"></img></h4>
           <div class="text-center">
             <img id="songToggle" onclick="toggleSong()" src="../assets/images/shortterm.png">
             <small id="songTerm">Short Term</small>
@@ -76,7 +78,8 @@
 
       <div class="row justify-content-md-center">
         <div id="recommended" class="col-8 mt-4 mb-3">
-          <h4 id="recTitle" class="text-center mb-3">Recommended Tracks</h4>
+          <h4 id="recTitle" class="text-center mb-3">Recommended Tracks<img id="question" data-toggle="popover"
+            title="Recommended Info." tabindex="0" data-trigger="focus" data-content="Recommended tracks based on top 5 artists above." src="../assets/images/question.png"></img></h4>
           <ul id="recArtists" class="list-unstyled">
 
           </ol>
@@ -114,5 +117,10 @@
 
     <script src="index.js"></script>
     <script src="scripts.js"></script>
+    <script>
+      $(document).ready(function(){
+          $('[data-toggle="popover"]').popover();
+      });
+    </script>
   </body>
 </html>

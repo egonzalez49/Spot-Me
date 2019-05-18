@@ -59,6 +59,7 @@ var authWindow = new BrowserWindow({
     'web-security': false
 });
 
+
 var authUrl = authorizeURL;
 
 //When the Authentication Token Expires
